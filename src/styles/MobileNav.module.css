@@ -1,0 +1,64 @@
+.mobileNav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobileNav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--acajou);
+    padding: 0.5rem;
+    border-top: 1px solid var(--border);
+    z-index: 100;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .navItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+    min-width: 64px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: inherit;
+  }
+
+  .navItem.active {
+    color: var(--indian-yellow);
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .mobileNav::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .mobileNav {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+} 

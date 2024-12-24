@@ -1,0 +1,108 @@
+.container {
+    padding: 20px;
+  }
+  
+  .detailCard {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 20px 0;
+    border: 1px solid var(--border);
+    position: relative; /* For positioning the edit icon */
+  }
+  
+  .cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .editIcon {
+    cursor: pointer;
+    color: var(--primary);
+    font-size: 1.2em;
+  }
+  
+  .companyInfo {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  
+  .fieldContainer {
+    flex: 1;
+    margin-right: 10px;
+  }
+  
+  .fieldContainer label {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  
+  .detailField p {
+    margin: 4px 0;
+    color: var(--text);
+  }
+  
+  .detailField input,
+  .detailField textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  
+  .detailField input:focus,
+  .detailField textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+  }
+  
+  .submitButton {
+    background-color: var(--primary);
+    color: var(--text);
+    padding: 10px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .submitButton:hover {
+    background-color: var(--primary-hover);
+  }
+  
+  .roleField {
+    margin-top: 20px;
+  }
+  
+  .roleList {
+    list-style-type: none;
+    padding: 0;
+    color: var(--text);
+  }
+  
+  .roleCard{
+    display: flex;
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 20px 0;
+    gap: 1rem;
+    border: 1px solid var(--border);
+    position: relative; /* For positioning the edit icon */
+  }
+
+  .roleCard input,
+  .roleCard textarea {
+    width: 20%;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  
+  .roleCard input:focus,
+  .roleCard textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+  }
