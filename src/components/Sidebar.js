@@ -11,7 +11,6 @@ import {
   RiDashboardLine,
   RiFileAddLine,
   RiFileListLine,
-  RiCheckboxCircleLine,
   RiNotification3Line,
   RiMenuFoldLine,
   RiMenuUnfoldLine,
@@ -23,7 +22,7 @@ import {
 export default function Sidebar() {
   const pathname = usePathname();
   const { isExpanded, setIsExpanded } = useSidebar();
-  const { user, logout, isLoading, fetchUserDetails } = useAuth();
+  const { user, logout, isLoading } = useAuth();
 
   const [roles, setRoles] = useState([]);
   const [loadingRoles, setLoadingRoles] = useState(true);
@@ -124,7 +123,7 @@ export default function Sidebar() {
     },
     {
       icon: <RiTeamLine size={24} />,
-      label: 'My Team Requests',
+      label: 'Team Requests',
       path: '/myteamrequests',
       visible: permissionLevel > 1 && roleID !== 'productAdmin' && roleID !== 'companyAdmin'
     },
@@ -152,18 +151,31 @@ export default function Sidebar() {
             <Link
               key={item.path}
               href={item.path}
-              className={`${styles.menuItem} ${
-                pathname === item.path ? styles.active : ''
-              }`}
+              className={`${styles.menuItem} ${pathname === item.path ? styles.active : ''}`}
             >
               <span className={styles.icon}>{item.icon}</span>
               {isExpanded && <span className={styles.label}>{item.label}</span>}
             </Link>
           ) : null
         )}
+        <Link
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            logout();
+          }}
+          className={`${styles.menuItem} ${styles.mobileLogout}`}
+        >
+          <span className={styles.icon}>
+            <RiLogoutBoxLine size={23} />
+          </span>
+          {isExpanded && <span className={styles.label}>Logout</span>}
+        </Link>
       </nav>
-      <div className={styles.profile}>
-        <div className={styles.userInfo}>
+
+      {/* Profile Section (only visible in desktop view) */}
+      <div className={`${styles.profile} ${styles.desktopOnly}`}>
+      <div className={styles.userInfo}>
           <div>
             <RiAccountCircleFill size={24} />
           </div>

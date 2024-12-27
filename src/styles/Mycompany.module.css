@@ -106,3 +106,19 @@
     border-color: var(--primary);
     outline: none;
   }
+
+  @media (max-width: 768px) {
+    .detailCard{
+      padding: 0.5rem;
+    }
+    .companyInfo{
+      display: block;
+    }
+    .roleCard{
+      flex-direction: column;
+    }
+    .roleCard input,
+    .roleCard textarea {
+      width: 100%;
+    }
+  }

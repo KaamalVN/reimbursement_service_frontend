@@ -6,6 +6,8 @@
 }
 
 .form {
+  display: flex;
+  flex-direction: column;
   background: var(--secondary);
   padding: 2rem;
   border-radius: 1rem;
@@ -270,4 +272,32 @@
 .reimbursementFormTextarea:focus {
   border-color: var(--primary);
   outline: none;
+}
+
+
+@media (max-width: 768px) {
+  .container{
+    padding: 0rem;
+  }
+
+  .form{
+    padding: 1rem;
+    margin-top: 0.2rem;
+  }
+
+  .formGroup{
+    margin-bottom: 1rem;
+  }
+
+  .options{
+    width: 20px;
+  }
+
+  .reimbursementContainer {
+    padding: 0.5rem;
+  }
+
+  .reimbursementTitle {
+    font-size: 30px;
+  }
 }

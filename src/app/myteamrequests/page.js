@@ -190,6 +190,19 @@ export default function MyTeamRequests() {
                     </tbody>
                 </table>
             </div>
+            <div className={styles.mobileTable}>
+                {currentRequests.map((request) => (
+                    <div key={request.RequestID} className={styles.mobileRow}>
+                        <h5>
+                            {`${request.CompanyEmployeeID} - ${request.Purpose} - ${request.Amounts.reduce((total, amount) => total + amount, 0).toFixed(2)}`}
+                        </h5>
+                        <div className={styles.mobileInfoContainer}>
+                            <span className={table[request.Status.toLowerCase()]}>{request.Status}</span>    
+                            <button className={table.viewBtn} onClick={() => handleViewClick(request)}>View</button>         
+                        </div>
+                    </div>
+                ))}
+            </div>
 
             <div className={styles.pagination}>
                 <button 

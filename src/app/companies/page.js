@@ -10,7 +10,7 @@ export default function Companies() {
     const [companies, setCompanies] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(5); // Number of items per page
+    const [itemsPerPage, setItemsPerPage] = useState(5); // Default number of items per page
     const [filter, setFilter] = useState('');
     const [sortOption, setSortOption] = useState('companyName-asc'); // New state for sort option
 
@@ -31,7 +31,41 @@ export default function Companies() {
 
                 if (response.ok) {
                     const data = await response.json();
-                    setCompanies(data); // Only set the fetched data
+
+                    // Append dummy data for demonstration purposes
+                    const dummyData = [
+                        {
+                            companyID: '2',
+                            companyName: 'Dummy Company A',
+                            address: '123 Dummy St, Dummy City',
+                            contactEmail: 'contact@dummycompanyA.com',
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            companyID: '3',
+                            companyName: 'Dummy Company B',
+                            address: '456 Dummy Rd, Dummy Town',
+                            contactEmail: 'contact@dummycompanyB.com',
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            companyID: '4',
+                            companyName: 'Dummy Company C',
+                            address: '789 Dummy Ave, Dummy Village',
+                            contactEmail: 'contact@dummycompanyC.com',
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            companyID: '5',
+                            companyName: 'Dummy Company D',
+                            address: '789 Dummy Ave, Dummy Village',
+                            contactEmail: 'contact@dummycompanyD.com',
+                            createdAt: new Date().toISOString()
+                        }
+                    ];
+
+                    // Combine fetched data with dummy data
+                    setCompanies([...data, ...dummyData]);
                 } else {
                     console.error('Failed to fetch companies:', response.statusText);
                 }
@@ -44,6 +78,18 @@ export default function Companies() {
 
         fetchCompanies();
     }, [user, router]);
+
+    // Update items per page based on window width
+    useEffect(() => {
+        const handleResize = () => {
+            setItemsPerPage(window.innerWidth <= 768 ? 4 : 5); // Set to 4 for mobile, 5 for desktop
+        };
+
+        handleResize(); // Set initial value
+        window.addEventListener('resize', handleResize); // Add resize event listener
+
+        return () => window.removeEventListener('resize', handleResize); // Cleanup
+    }, []);
 
     // Sort the companies based on the selected sort option
     const sortedCompanies = [...companies].sort((a, b) => {
@@ -90,26 +136,43 @@ export default function Companies() {
                     <option value="createdAt-desc" className={styles.options}>Sort by Created At Descending</option>
                 </select>
             </div>
-            <table className={styles.table}>
-                <thead>
-                    <tr>
-                        <th>Company Name</th>
-                        <th>Address</th>
-                        <th>Contact Email</th>
-                        <th>Created At</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {currentCompanies.map((company) => (
-                        <tr key={company.companyID}>
-                            <td>{company.companyName}</td>
-                            <td>{company.address}</td>
-                            <td>{company.contactEmail}</td>
-                            <td>{new Date(company.createdAt).toLocaleString()}</td>
+            <div className={styles.tableContainer}>
+                {/* Desktop Table */}
+                <table className={styles.table}>
+                    <thead>
+                        <tr>
+                            <th>Company Name</th>
+                            <th>Address</th>
+                            <th>Contact Email</th>
+                            <th>Created At</th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        {currentCompanies.map((company) => (
+                            <tr key={company.companyID}>
+                                <td>{company.companyName}</td>
+                                <td>{company.address}</td>
+                                <td>{company.contactEmail}</td>
+                                <td>{new Date(company.createdAt).toLocaleString()}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+
+                {/* Mobile View */}
+                <div className={styles.mobileTable}>
+                    {currentCompanies.map((company) => (
+                        <div key={company.companyID} className={styles.mobileRow}>
+                            <h4>{company.companyName}</h4>
+                            <p className={styles.mobileAddress}>{company.address}</p>
+                            <div className={styles.mobileInfoContainer}>
+                                <p className={styles.mobileEmail}>{company.contactEmail}</p>
+                                <p className={styles.mobileDate}>{new Date(company.createdAt).toLocaleDateString()}</p>
+                            </div>
+                        </div>
                     ))}
-                </tbody>
-            </table>
+                </div>
+            </div>
             <div className={styles.pagination}>
                 <button 
                     className={styles.pageButton} 

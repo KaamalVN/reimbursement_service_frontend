@@ -52,44 +52,6 @@
     color: var(--primary); /* Change text color on hover */
 }
 
-
-/* Responsive styles */
-@media (max-width: 768px) {
-    .table,
-    .table thead,
-    .table tbody,
-    .table th,
-    .table td,
-    .table tr {
-        display: block; /* Stack elements vertically */
-        width: 100%; /* Full width */
-    }
-
-    .table tr {
-        margin-bottom: 1rem; /* Space between rows */
-    }
-
-    .table th {
-        display: none; /* Hide headers */
-    }
-
-    .table td {
-        text-align: right; /* Right-align text */
-        position: relative; /* Position for pseudo-elements */
-        padding-left: 50%; /* Space for labels */
-    }
-
-    .table td::before {
-        content: attr(data-label); /* Use data attribute for labels */
-        position: absolute; /* Position the label */
-        left: 0; /* Align to left */
-        width: 50%; /* Width of label */
-        padding-left: 15px; /* Padding */
-        text-align: left; /* Left-align text */
-        font-weight: bold; /* Bold labels */
-    }
-}
-
 .filterInput {
     padding: 10px;
     margin-bottom: 20px;
@@ -144,4 +106,91 @@
 
 .options {
     background-color: var(--primary);
+}
+
+.submitButton {
+    background-color: var(--primary);
+    color: var(--text);
+    padding: 10px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .submitButton:hover {
+    background-color: var(--primary-hover);
+  }
+
+  .tableContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.mobileTable {
+    display: none; /* Hide mobile view by default */
+}
+
+
+@media (max-width: 768px) {
+    .table {
+        display: none; /* Hide the desktop table on mobile */
+    }
+
+    .mobileTable {
+        display: block; /* Show mobile view */
+        border: 1px solid var(--border);
+        overflow: hidden;
+        border-radius: 5px 5px 0 0;
+    }
+
+    .mobileRow {
+        border-bottom: 1px solid var(--border);
+        padding: 10px;
+    }
+
+    .mobileRow:nth-child(even){
+        background-color: var(--card-bg);
+    }
+
+    .mobileRow h4 {
+        margin: 0;
+    }
+
+    .mobileAddress {
+        font-size: 14px;
+        margin-bottom: 5px; /* Add space below address */
+    }
+
+    .mobileInfoContainer {
+        display: flex; /* Use Flexbox for side-by-side layout */
+        justify-content: space-between; /* Space out the email and date */
+        align-items: center; /* Center align items vertically */
+    }
+
+    .mobileEmail {
+        font-size: 10px;
+        overflow: hidden; /* Hide overflow */
+        text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+        white-space: nowrap; /* Prevent wrapping */
+        flex: 1; /* Allow email to grow/shrink */
+    }
+
+    .mobileDate {
+        font-size: 10px;
+        text-align: right; /* Align date to the right */
+        margin-left: 10px; /* Space between email and date */
+    }
+
+    .mobileInfo {
+        flex: 1;
+    }
+    
+    .mobileRole {
+        margin: 0;
+    }
+
+    .viewIcon {
+        cursor: pointer;
+        color: var(--primary);
+    }
 }

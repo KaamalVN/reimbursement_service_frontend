@@ -1,0 +1,98 @@
+.detailCard {
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    margin: 20px 0;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+}
+
+.uploadArea {
+    border: 2px dashed var(--primary);
+    border-radius: 8px;
+    padding: 40px;
+    cursor: pointer;
+    position: relative;
+    color: var(--text);
+}
+
+.loader {
+    border: 6px solid rgba(255, 255, 255, 0.1);
+    border-top: 6px solid var(--primary);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.fileInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    border: 2px solid var(--border);
+    padding: 1rem;
+    border-radius: 8px;
+    position: relative; /* Position relative for the icon */
+}
+
+.fileDetails {
+    display: flex;
+    flex-direction: column;
+    text-align: left; /* Left-align text */
+}
+
+.rowSizeText {
+    font-size: 0.85rem; /* Reduce the font size */
+}
+
+.removeIcon {
+    color: var(--indian-yellow);
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px; /* Adjust size as needed */
+}
+
+.progressBar {
+    height: 8px;
+    background-color: var(--primary);
+    transition: width 0.5s ease;
+    margin-top: 10px;
+}
+
+.submitButton {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: none;
+    background: var(--indian-yellow);
+    color: var(--old-burgundy);
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 1rem;
+    margin-bottom: 10px; /* Add margin for spacing */
+}
+
+.submitButton:hover {
+    background: var(--russet);
+    color: var(--white);
+}
+
+@media (max-width: 768px) {
+    .detailCard{
+      padding: 1rem 0.5rem 1rem;
+    }
+}

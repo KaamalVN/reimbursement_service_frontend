@@ -232,7 +232,6 @@ export default function Mycompany() {
         )}
       </div>
 
-      {/* Roles Section */}
       <div>
         <h2>Manage Roles</h2>
         <div className={styles.roleCard}>
@@ -248,7 +247,7 @@ export default function Mycompany() {
             value={newRoleLevel}
             onChange={(e) => setNewRoleLevel(e.target.value)}
           />
-          <button onClick={handleAddRole}>Add Role</button>
+          <button className={styles.submitButton} onClick={handleAddRole}>Add Role</button>
         </div>
         <input
           type="text"
@@ -281,7 +280,7 @@ export default function Mycompany() {
                 <td>{role.RoleName}</td>
                 <td>{role.PermissionLevel}</td>
                 <td>
-                  <button onClick={() => handleDeleteRole(role.RoleID)}>Delete</button>
+                  <button className={styles.submitButton} onClick={() => handleDeleteRole(role.RoleID)}>Delete</button>
                 </td>
               </tr>
             ))}

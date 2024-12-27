@@ -51,24 +51,26 @@ export function AuthProvider({ children }) {
   const login = async (email, password) => {
     try {
       if (typeof window !== 'undefined') {
-        // Perform login API call
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }),
         });
-
+  
         if (!response.ok) {
-          throw new Error('Login failed');
+          if (response.status === 401) {
+            return 'Invalid credentials'; // Return message for invalid credentials
+          }
+          return 'Server error. Please try again later.'; // General error message for other statuses
         }
-
+  
         const data = await response.json();
         const { token, user: loggedInUser } = data;
-
+  
         localStorage.setItem('token', token); // Store token
         setUser(loggedInUser);
         console.log('User logged in:', loggedInUser); // Debugging
-
+  
         // Redirect based on role_id
         if (loggedInUser.role_id === 'productAdmin') {
           router.push('/companies');
@@ -77,14 +79,16 @@ export function AuthProvider({ children }) {
         } else {
           router.push('/dashboard');
         }
-
-        return true;
+  
+        return;
       }
     } catch (error) {
       console.error('Login error:', error);
-      return false;
+      return 'An unexpected error occurred. Please try again.'; // Handle other unexpected errors
     }
   };
+  
+  
 
   const logout = () => {
     if (typeof window !== 'undefined') {

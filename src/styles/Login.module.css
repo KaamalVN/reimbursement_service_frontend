@@ -82,3 +82,42 @@
   margin-bottom: 1.5rem;
   font-size: 0.875rem;
 } 
+
+.passwordContainer {
+  position: relative; /* Enable positioning of children */
+}
+
+.passwordInput {
+  width: 100%; /* Full width */
+  padding-right: 40px; /* Add padding for icon */
+}
+
+.iconBtn {
+  position: absolute;
+  right: 10px; /* Adjust as needed */
+  top: 50%;
+  transform: translateY(-50%); /* Center the icon vertically */
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2em; /* Adjust icon size */
+  color: #555; /* Icon color */
+}
+
+.iconBtn svg {
+  fill: var(--primary); /* This makes the icon inherit the color from the button */
+}
+
+.iconBtn:hover svg {
+  fill: var(--russet); /* Ensure the icon color changes on hover */
+}
+
+@media (max-width: 768px) {
+  .loginContainer{
+    padding: 0;
+  }
+
+  .loginCard{
+    padding: 2.5rem 0.8rem 2.5rem;
+  }
+}
