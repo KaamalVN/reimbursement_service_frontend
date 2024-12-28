@@ -17,52 +17,52 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
-    const fetchMyRequests = async () => {
+    const fetchRequests = async () => {
       if (!user) return; // Wait for user to be defined
 
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-reimbursement-requests`, {
+        // Fetch my requests
+        const myRequestsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-reimbursement-requests`, {
           method: 'POST', // Use POST method
           headers: {
             'Content-Type': 'application/json' // Set content type to JSON
           },
           body: JSON.stringify({ companyID, employeeID }) // Send as JSON body
         });
-        if (!response.ok) {
+        
+        if (!myRequestsResponse.ok) {
           throw new Error('Failed to fetch my requests');
         }
-        const data = await response.json();
-        setMyRequests(data); // Set the fetched data to the myRequests state
-      } catch (error) {
-        console.error('Error fetching my requests:', error);
-      }
-    };
 
-    const fetchTeamRequests = async () => {
-      if (!user || permissionLevel <= 1) return; // Wait for user to be defined and check permission level
+        const myRequestsData = await myRequestsResponse.json();
+        setMyRequests(myRequestsData); // Set the fetched data to the myRequests state
 
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/my-team-requests`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ EmployeeID: employeeID }) // Send the EmployeeID
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch team requests');
+        // Fetch team requests only if permission level > 1
+        if (permissionLevel > 1) {
+          const teamRequestsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/my-team-requests`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ EmployeeID: employeeID }) // Send the EmployeeID
+          });
+
+          if (!teamRequestsResponse.ok) {
+            throw new Error('Failed to fetch team requests');
+          }
+
+          const teamRequestsData = await teamRequestsResponse.json();
+          setTeamRequests(teamRequestsData); // Set the fetched data to the teamRequests state
         }
-        const data = await response.json();
-        setTeamRequests(data); // Set the fetched data to the teamRequests state
       } catch (error) {
-        console.error('Error fetching team requests:', error);
+        console.error('Error fetching requests:', error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching
       }
     };
 
-    fetchMyRequests(); // Fetch my requests
-    fetchTeamRequests(); // Fetch team requests
-    setLoading(false); // Set loading to false after fetching
-  }, [user, companyID, employeeID]); // Re-fetch when user or IDs change
+    fetchRequests(); // Fetch requests in parallel
+  }, [user, companyID, employeeID, permissionLevel]); // Re-fetch when dependencies change
 
   // Count the requests by status for my requests
   const countMyRequests = (status) => myRequests.filter(request => request.Status === status).length;
