@@ -61,7 +61,7 @@ export default function Mycompany() {
   
       if (response.ok) {
         const data = await response.json();
-        console.log('Fetched Company Details:', data);
+        
         setCompanyDetails({
           name: data.companyName,  // Use correct keys from response
           email: data.companyEmail,

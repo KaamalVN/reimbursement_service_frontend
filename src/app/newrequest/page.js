@@ -63,7 +63,7 @@ export default function NewRequest() {
             Receipts: formData.receipts.map((file) => `/uploads/${file.name}`), // Dummy paths
         };
 
-        console.log('Request Data: ',requestData);
+        
     
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reimbursement-request`, {

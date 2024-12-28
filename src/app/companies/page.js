@@ -31,41 +31,7 @@ export default function Companies() {
 
                 if (response.ok) {
                     const data = await response.json();
-
-                    // Append dummy data for demonstration purposes
-                    const dummyData = [
-                        {
-                            companyID: '2',
-                            companyName: 'Dummy Company A',
-                            address: '123 Dummy St, Dummy City',
-                            contactEmail: 'contact@dummycompanyA.com',
-                            createdAt: new Date().toISOString()
-                        },
-                        {
-                            companyID: '3',
-                            companyName: 'Dummy Company B',
-                            address: '456 Dummy Rd, Dummy Town',
-                            contactEmail: 'contact@dummycompanyB.com',
-                            createdAt: new Date().toISOString()
-                        },
-                        {
-                            companyID: '4',
-                            companyName: 'Dummy Company C',
-                            address: '789 Dummy Ave, Dummy Village',
-                            contactEmail: 'contact@dummycompanyC.com',
-                            createdAt: new Date().toISOString()
-                        },
-                        {
-                            companyID: '5',
-                            companyName: 'Dummy Company D',
-                            address: '789 Dummy Ave, Dummy Village',
-                            contactEmail: 'contact@dummycompanyD.com',
-                            createdAt: new Date().toISOString()
-                        }
-                    ];
-
-                    // Combine fetched data with dummy data
-                    setCompanies([...data, ...dummyData]);
+                    setCompanies(data);
                 } else {
                     console.error('Failed to fetch companies:', response.statusText);
                 }

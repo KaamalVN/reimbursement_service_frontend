@@ -44,7 +44,7 @@ export default function MyTeamRequests() {
                     throw new Error('Failed to fetch requests');
                 }
                 const data = await response.json();
-                console.log('My Team Requests: ', data);
+                
                 setRequests(data);
             } catch (error) {
                 console.error('Error fetching requests:', error);
@@ -103,7 +103,7 @@ export default function MyTeamRequests() {
       if (confirm && selectedRequest) {
           try {
               // Log the action and request ID for debugging
-              console.log(`${action} request ID: ${selectedRequest.RequestID} by Employee ID: ${employeeID}`);
+              
   
               const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/approve-reject`, {
                   method: 'POST',
@@ -120,7 +120,7 @@ export default function MyTeamRequests() {
               }
   
               const result = await response.json(); // Optionally handle the response
-              console.log('Action Result: ', result);
+              
   
               // Update the local state for the requests array
               setRequests(prevRequests =>

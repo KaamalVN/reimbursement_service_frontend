@@ -30,7 +30,7 @@ export function AuthProvider({ children }) {
           })
           .then((data) => {
             setUser(data.user); // Assuming the backend sends user data
-            console.log('User details:', data.user); // Debugging
+            
 
             // Redirect based on user role
             if (data.user.role === 'productAdmin') {
@@ -69,7 +69,7 @@ export function AuthProvider({ children }) {
   
         localStorage.setItem('token', token); // Store token
         setUser(loggedInUser);
-        console.log('User logged in:', loggedInUser); // Debugging
+        
   
         // Redirect based on role_id
         if (loggedInUser.role_id === 'productAdmin') {

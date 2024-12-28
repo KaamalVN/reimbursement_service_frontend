@@ -38,7 +38,7 @@ export default function Company() {
     
             if (response.ok) {
                 const result = await response.json();
-                console.log('Server Response:', result); // Debug log
+                
                 setIsSubmissionSuccessful(true);
                 setPopupVisible(true);
             } else {
