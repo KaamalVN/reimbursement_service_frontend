@@ -189,6 +189,10 @@
         margin: 0;
     }
 
+    .mobileP {
+        font-size: 14px;
+    }
+
     .viewIcon {
         cursor: pointer;
         color: var(--primary);
