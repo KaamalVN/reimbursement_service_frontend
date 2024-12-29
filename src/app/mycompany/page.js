@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { getCompanyID } from '@/utils/jwtUtils';
 import { RiEdit2Line, RiCloseLine } from 'react-icons/ri';
 import styles from '@/styles/Mycompany.module.css';
-import tables from '@/styles/Tables.module.css'; // Import the CSS module
+import tables from '@/styles/Tables.module.css';
 
 export default function Mycompany() {
   const { user } = useAuth();
@@ -20,36 +20,32 @@ export default function Mycompany() {
   });
   const [buttonText, setButtonText] = useState('Save Changes');
   
-  // State for roles
   const [roles, setRoles] = useState([]);
   const [loadingRoles, setLoadingRoles] = useState(true);
   const [newRoleName, setNewRoleName] = useState('');
   const [newRoleLevel, setNewRoleLevel] = useState('');
   const [filter, setFilter] = useState('');
-  const [sortOption, setSortOption] = useState('roleName-asc'); // Sort option for roles
+  const [sortOption, setSortOption] = useState('roleName-asc');
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
     if (isEditing) {
-      setButtonText('Save Changes'); // Reset button text when switching to non-edit mode
+      setButtonText('Save Changes');
     }
   };
 
   const handleSaveChanges = () => {
-    // Logic to save changes goes here
     if (buttonText === 'Save Changes') {
       setButtonText('Saved Changes');
     } else {
       setButtonText('Save Changes');
     }
-    setIsEditing(false); // Optionally set to false after saving
+    setIsEditing(false);
   };
 
   const fetchCompanyDetails = async () => {
-    if (!user) {
-      return <p>Loading...</p>;
-    }
-  
+    if (!user) return;
+
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/company/${companyID}`, {
         method: 'GET',
@@ -58,12 +54,11 @@ export default function Mycompany() {
           'Authorization': `Bearer ${user.token}`,
         },
       });
-  
+
       if (response.ok) {
         const data = await response.json();
-        
         setCompanyDetails({
-          name: data.companyName,  // Use correct keys from response
+          name: data.companyName,
           email: data.companyEmail,
           address: data.companyAddress,
         });
@@ -74,25 +69,22 @@ export default function Mycompany() {
       console.error('Error fetching company details:', error);
     }
   };
-  
-  
+
   const fetchRoles = async () => {
-    if (!user) {
-      return <p>Loading...</p>;
-    }
+    if (!user) return;
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/roles/${companyID}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}`
-        }
+          'Authorization': `Bearer ${user.token}`,
+        },
       });
 
       if (response.ok) {
         const data = await response.json();
-        setRoles(data); // Set the fetched roles data
+        setRoles(data);
       } else {
         console.error('Failed to fetch roles:', response.statusText);
       }
@@ -110,13 +102,13 @@ export default function Mycompany() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${user.token}`
+            'Authorization': `Bearer ${user.token}`,
           },
-          body: JSON.stringify({ roleName: newRoleName, permissionLevel: newRoleLevel, companyID: companyID })
+          body: JSON.stringify({ roleName: newRoleName, permissionLevel: newRoleLevel, companyID }),
         });
 
         if (response.ok) {
-          fetchRoles(); // Refresh roles after adding
+          fetchRoles();
           setNewRoleName('');
           setNewRoleLevel('');
         } else {
@@ -134,12 +126,12 @@ export default function Mycompany() {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/roles/${roleId}`, {
           method: 'DELETE',
           headers: {
-            'Authorization': `Bearer ${user.token}`
-          }
+            'Authorization': `Bearer ${user.token}`,
+          },
         });
 
         if (response.ok) {
-          fetchRoles(); // Refresh roles after deletion
+          fetchRoles();
         } else {
           console.error('Failed to delete role:', response.statusText);
         }
@@ -157,19 +149,21 @@ export default function Mycompany() {
   // Sort roles based on the selected sort option
   const sortedRoles = [...roles].sort((a, b) => {
     const [key, order] = sortOption.split('-');
-    if (a[key] < b[key]) return order === 'asc' ? -1 : 1;
-    if (a[key] > b[key]) return order === 'asc' ? 1 : -1;
+    const aValue = a[key.charAt(0).toUpperCase() + key.slice(1)] ? a[key.charAt(0).toUpperCase() + key.slice(1)].toString().toLowerCase() : '';
+    const bValue = b[key.charAt(0).toUpperCase() + key.slice(1)] ? b[key.charAt(0).toUpperCase() + key.slice(1)].toString().toLowerCase() : '';
+  
+    if (aValue < bValue) return order === 'asc' ? -1 : 1;
+    if (aValue > bValue) return order === 'asc' ? 1 : -1;
     return 0;
   });
   
   const filteredRoles = sortedRoles.filter(role =>
     role.RoleName && role.RoleName.toLowerCase().includes(filter.toLowerCase())
   );
-  
 
   // Show loading state
   if (loadingRoles || !user) {
-    return <p>Loading...</p>; // Loading state for roles
+    return <p>Loading...</p>;
   }
 
   return (
@@ -190,11 +184,11 @@ export default function Mycompany() {
               {isEditing ? (
                 <input
                   type="text"
-                  value={companyDetails.name}  // Access the state correctly
-                  onChange={(e) => setCompanyDetails({ ...companyDetails, name: e.target.value })} // Update state on change
+                  value={companyDetails.name}
+                  onChange={(e) => setCompanyDetails({ ...companyDetails, name: e.target.value })}
                 />
               ) : (
-                <p>{companyDetails.name || 'N/A'}</p> // Display fetched company name
+                <p>{companyDetails.name || 'N/A'}</p>
               )}
             </div>
             <div className={styles.fieldContainer}>
@@ -202,11 +196,11 @@ export default function Mycompany() {
               {isEditing ? (
                 <input
                   type="email"
-                  value={companyDetails.email} // Access the state correctly
-                  onChange={(e) => setCompanyDetails({ ...companyDetails, email: e.target.value })} // Update state on change
+                  value={companyDetails.email}
+                  onChange={(e) => setCompanyDetails({ ...companyDetails, email: e.target.value })}
                 />
               ) : (
-                <p>{companyDetails.email || 'N/A'}</p> // Display fetched company email
+                <p>{companyDetails.email || 'N/A'}</p>
               )}
             </div>
           </div>
@@ -214,16 +208,14 @@ export default function Mycompany() {
           <label>Company Address:</label>
           {isEditing ? (
             <textarea
-              value={companyDetails.address} // Access the state correctly
-              onChange={(e) => setCompanyDetails({ ...companyDetails, address: e.target.value })} // Update state on change
+              value={companyDetails.address}
+              onChange={(e) => setCompanyDetails({ ...companyDetails, address: e.target.value })}
               rows={4}
             />
           ) : (
-            <p>{companyDetails.address || 'N/A'}</p> // Display fetched company address
+            <p>{companyDetails.address || 'N/A'}</p>
           )}
         </div>
-
-
 
         {isEditing && (
           <button className={styles.submitButton} onClick={handleSaveChanges}>
@@ -286,6 +278,16 @@ export default function Mycompany() {
             ))}
           </tbody>
         </table>
+        <div className={tables.mobileTable}>
+          {filteredRoles.map((role) => (
+            <div key={role.RoleID} className={tables.mobileRow}>
+              <div className={tables.mobileInfoContainer}>
+                <p className={tables.mobileP}>{`${role.RoleName} - Level[${role.PermissionLevel}]`}</p>
+                <button className={tables.submitButton} onClick={() => handleDeleteRole(role.RoleID)}>Delete</button>
+              </div>
+            </div>
+          ))}
+        </div>
         {filteredRoles.length === 0 && <p>No roles found.</p>}
       </div>
     </div>
