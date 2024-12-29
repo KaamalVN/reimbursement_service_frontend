@@ -35,9 +35,6 @@
 }
 
 .fileInfo {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-top: 10px;
     border: 2px solid var(--border);
     padding: 1rem;
@@ -68,7 +65,6 @@
     height: 8px;
     background-color: var(--primary);
     transition: width 0.5s ease;
-    margin-top: 10px;
 }
 
 .submitButton {
@@ -90,6 +86,15 @@
     background: var(--russet);
     color: var(--white);
 }
+
+.progressBarWrapper {
+    width: 100%; /* Full width of the parent */
+    background-color: var(--old-burgundy); /* Light grey background */
+    border-radius: 4px; /* Rounded corners to match the bar */
+    overflow: hidden; /* Ensures the bar stays within the container */
+    margin-top: 10px; /* Space above the progress bar */
+}
+
 
 @media (max-width: 768px) {
     .detailCard{
