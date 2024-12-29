@@ -4,6 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { getCompanyID } from '@/utils/jwtUtils';
 import styles from '@/styles/Employee.module.css';
+import popup from '@/styles/RequestForm.module.css';
 import { RiCloseLine } from 'react-icons/ri'; // Import the icon
 
 export default function Employee() {
@@ -48,42 +49,60 @@ export default function Employee() {
       alert('Please select a file to upload.');
       return;
     }
-
+  
     const formData = new FormData();
-    formData.append('file', new Blob([fileInfo.name], { type: 'text/csv' })); // Fix this line
+    const selectedFile = document.getElementById('fileInput').files[0]; // Get the actual selected file
+    formData.append('file', selectedFile); // Append the actual file
     formData.append('companyID', companyID);
-
+  
     setLoading(true);
     setUploadProgress(0);
-
+  
+    // Set base time per row (in milliseconds)
+    const baseTimePerRow = 4714; // 4714 ms per row based on your observations
+    const estimatedUploadTime = fileInfo.rowsCount * baseTimePerRow; // Total estimated time based on rows
+    const totalUploadTime = estimatedUploadTime + 1000; // Add 1 second for loading effect
+  
+    const startTime = Date.now();
+  
+    // Start a timer to simulate progress
+    const intervalTime = 300; // Interval time to update progress (300 ms)
+    const totalIntervals = totalUploadTime / intervalTime; // Total intervals to reach 100%
+  
+    const intervalId = setInterval(() => {
+      setUploadProgress((prevProgress) => {
+        const newProgress = Math.min(prevProgress + (100 / totalIntervals), 100);
+        return newProgress;
+      });
+    }, intervalTime);
+  
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/upload-employees`, {
         method: 'POST',
         body: formData,
       });
-
+  
       const data = await response.json();
       setMessage(data.message);
-      simulateLoading(data.rowsCount); // Simulate loading bar for the number of rows
+  
+      // Set the progress bar to 100% immediately upon receiving a response
+      setUploadProgress(100);
+  
+      // Simulate loading complete instantly on response
+      setTimeout(() => {
+        setPopupVisible(true); // Show popup after loading
+      }, 500); // Delay to give the loading bar time to fill
     } catch (error) {
       console.error('Error uploading file:', error);
       setMessage('Error uploading file.');
+  
+      // Set the progress bar to 100% on error
+      setUploadProgress(100);
+      setPopupVisible(true); // Show popup immediately on error
     } finally {
+      clearInterval(intervalId); // Clear the interval
       setLoading(false);
     }
-  };
-
-  const simulateLoading = (rowsCount) => {
-    let progress = 0;
-    const interval = setInterval(() => {
-      if (progress < 100) {
-        progress += (100 / rowsCount);
-        setUploadProgress(Math.min(progress, 100));
-      } else {
-        clearInterval(interval);
-        setPopupVisible(true); // Show popup after loading
-      }
-    }, (rowsCount > 0 ? 5000 / rowsCount : 5000)); // Adjust timing based on rows count
   };
 
   const handleRemoveFile = () => {
@@ -137,26 +156,20 @@ export default function Employee() {
           onDragOver={handleDragOver}
           onDrop={handleDrop}
         >
-          {loading ? (
-            <div className={styles.loader}></div> // Loading circle
+          <input
+            type="file"
+            accept=".csv"
+            id="fileInput"
+            onChange={handleFileChange}
+            style={{ display: 'none' }} // Hide the input
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          />
+          {fileInfo.name ? (
+            <p>{fileInfo.name}</p> // Show selected file name
           ) : (
-            <>
-              <input
-                type="file"
-                accept=".csv"
-                id="fileInput"
-                onChange={handleFileChange}
-                style={{ display: 'none' }} // Hide the input
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              />
-              {fileInfo.name ? (
-                <p>{fileInfo.name}</p> // Show selected file name
-              ) : (
-                <p>Drag & drop a file here or click to select</p>
-              )}
-            </>
+            <p>Drag & drop a file here or click to select</p>
           )}
         </div>
         {fileInfo.name && (
@@ -170,6 +183,13 @@ export default function Employee() {
                   {(fileInfo.size / 1024).toFixed(2)} KB
                 </p>
               </div>
+              {loading && (
+                <div className={styles.progressBarWrapper}>
+                  <div className={styles.progressBar} style={{ width: `${uploadProgress}%` }}>
+                    {/* Removed progress percentage display */}
+                  </div>
+                </div>
+              )}
               <RiCloseLine
                 onClick={handleRemoveFile}
                 className={styles.removeIcon}
@@ -178,23 +198,20 @@ export default function Employee() {
             <button onClick={handleUpload} disabled={loading} className={styles.submitButton}>
               {loading ? 'Uploading...' : 'Submit'}
             </button>
-            {uploadProgress > 0 && (
-              <div className={styles.progressBar} style={{ width: `${uploadProgress}%` }}></div>
-            )}
             {message && <p>{message}</p>}
           </div>
         )}
       </div>
       {popupVisible && (
-        <div className={styles.popup}>
-          <div className={styles.popupContent}>
-            <h2>Upload Successful!</h2>
+        <div className={popup.popup}>
+          <div className={popup.popupContent}>
+            <h2>{message.includes('Error') ? 'Upload Failed!' : 'Upload Successful!'}</h2>
             <p>{message}</p>
-            <div className={styles.popupButtons}>
-              <button onClick={() => router.push('/employees')} className={styles.popupButton}>
+            <div className={popup.popupButtons}>
+              <button onClick={() => router.push('/employees')} className={popup.popupButton}>
                 Go to Employees
               </button>
-              <button onClick={handleClosePopup} className={styles.popupButton}>
+              <button onClick={handleClosePopup} className={popup.popupButton}>
                 Upload Another File
               </button>
             </div>
